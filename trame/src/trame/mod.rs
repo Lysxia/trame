@@ -274,6 +274,7 @@ where
         }
     }
 
+    #[cfg_attr(creusot, trusted)]
     fn list_stage_slot_mut(
         &mut self,
         list_idx: NodeIdx<R>,
@@ -302,6 +303,7 @@ where
         }
     }
 
+    #[cfg_attr(creusot, trusted)]
     fn alloc_list_stage_slot(
         &mut self,
         list_idx: NodeIdx<R>,
@@ -388,6 +390,7 @@ where
         stage.chunks.iter().map(|chunk| chunk.capacity).collect()
     }
 
+    #[cfg_attr(creusot, trusted)]
     fn map_stage_slot_mut(
         &mut self,
         map_idx: NodeIdx<R>,
@@ -426,6 +429,7 @@ where
         stage.entries.get(entry_idx).copied()
     }
 
+    #[cfg_attr(creusot, trusted)]
     fn alloc_map_stage_slot(
         &mut self,
         map_idx: NodeIdx<R>,

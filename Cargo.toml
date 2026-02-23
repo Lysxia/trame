@@ -24,3 +24,6 @@ smallvec = "2.0.0-alpha.12"
 afl = "0.17"
 arbitrary = { version = "1", features = ["derive"] }
 proptest = "1"
+
+[workspace.metadata.creusot]
+default-members = ["trame-runtime", "trame"]

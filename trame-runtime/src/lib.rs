@@ -3,6 +3,7 @@
 #![cfg_attr(kani, feature(stmt_expr_attributes))]
 #![cfg_attr(kani, feature(proc_macro_hygiene))]
 
+#[cfg_attr(creusot, trusted)]
 pub mod live;
 
 #[cfg(not(creusot))]
@@ -19,7 +20,7 @@ use creusot_std::model::DeepModel;
 use creusot_std::macros::{ensures, logic, requires};
 
 #[cfg(creusot)]
-use creusot_std::prelude::{check, extern_spec, trusted};
+use creusot_std::prelude::{check, extern_spec, trusted, PartialEq};
 
 #[cfg(creusot)]
 pub type VLayout = std::alloc::Layout;
@@ -113,7 +114,18 @@ pub enum EnumReprKind {
     },
 }
 
+#[cfg(creusot)]
+impl DeepModel for EnumReprKind {
+    type DeepModelTy = Self;
+
+    #[logic]
+    fn deep_model(self) -> Self::DeepModelTy {
+        self
+    }
+}
+
 /// In-memory representation of an enum discriminant/tag.
+#[cfg_attr(creusot, derive(DeepModel))]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum EnumDiscriminantRepr {
     RustNpo,
@@ -760,6 +772,7 @@ pub trait IPtr: Copy {
 
 impl IPtr for *mut u8 {
     #[inline]
+    #[cfg_attr(creusot, trusted)]
     unsafe fn byte_add(self, n: usize) -> Self {
         // SAFETY: caller ensures the resulting pointer is in-bounds.
         unsafe { self.byte_add(n) }
